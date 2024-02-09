@@ -8,14 +8,16 @@
 FILES 		=	main.c							\
 				maths_functions.c 				\
 				matrix_functions.c				\
-				matrix_computing_functions.c 	\
 				nn_functions.c	 				\
 				dataset_functions.c 			\
+				my_str_to_word_array.c 			\
 
 NAME		= neural_network
 
 all:
 	gcc -o $(NAME) $(FILES) -lm -Wextra -Wall
+	touch nn_save
+	echo "" > nn_save
 
 clean:
 	rm -f *~
