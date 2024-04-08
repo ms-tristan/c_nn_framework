@@ -7,8 +7,14 @@
 
 FILES 		=	main.c							\
 				maths_functions.c 				\
-				matrix_functions.c				\
-				nn_functions.c	 				\
+				matrix_computing_functions.c	\
+				matrix_management_functions.c	\
+				matrix_nn_functions.c			\
+				nn_computing_functions.c	 	\
+				nn_management_functions.c	 	\
+				nn_training_functions.c	 		\
+				nn_interactions_functions.c	 	\
+				nn_saving_functions.c 			\
 				dataset_functions.c 			\
 				my_str_to_word_array.c 			\
 

@@ -18,7 +18,8 @@
 #define MAT_PRINT(m) mat_print(m, #m)
 #define NN_PRINT(nn) nn_print(nn, #nn)
 #define NN_INIT(arch) nn_init(arch, (int)(sizeof(arch) / sizeof(*arch)))
-#define DATASHEET_INIT(ip, op) datasheet_init(ip, (int)(sizeof(ip) / sizeof(*ip)), op, (int)(sizeof(op) / sizeof(*op)))
+#define DATASHEET_INIT(ip, op) datasheet_init(ip,\
+(int)(sizeof(ip) / sizeof(*ip)), op, (int)(sizeof(op) / sizeof(*op)))
 
 #define ACTIVATION SIGF
 
@@ -27,6 +28,12 @@ typedef enum activation_func {
     DIV,
     NONE
 } activ_e;
+
+typedef struct vector3i {
+    int x;
+    int y;
+    int z;
+} vec3i_t;
 
 typedef struct matrix {
     int rows;
@@ -64,20 +71,24 @@ void mat_sum(mat_t *dest, mat_t *src);
 void mat_free(mat_t *m);
 void mat_div(mat_t *m, int div);
 void mat_substract(mat_t *dest, mat_t *src);
+void mat_mutate(mat_t *mat, float mutation_rate);
 
 // NEURAL NETWORK FUNCTIONS
 nn_t nn_init(int *arch, int arch_size);
 nn_t nn_copy_arch(nn_t *nn);
+nn_t nn_open(const char *path);
 void nn_copy(nn_t *dest, nn_t *src);
 void nn_rand(nn_t *nn);
 void nn_forward(nn_t *nn, dat_t *td);
-void nn_backprop(nn_t *nn, nn_t *g, dat_t **dataset);
+void nn_train(nn_t *nn, nn_t *g, dat_t **dataset);
 void nn_print(nn_t nn, const char *name);
 void nn_free(nn_t *nn);
 void nn_set(nn_t *nn, float nb);
 float nn_cost(nn_t *nn, dat_t **dataset);
-void nn_learn(nn_t *nn, nn_t *g, float rate);
+void nn_apply_gradient(nn_t *nn, nn_t *g, float rate);
 void nn_print_results(nn_t *nn, dat_t *td);
+void nn_mutate(nn_t *nn, float mutation_rate);
+void nn_save(nn_t *nn, const char *path);
 
 // DATA FUNCTIONS
 dat_t *datasheet_init(float *inputs, int ip_len, float *outputs, int op_len);

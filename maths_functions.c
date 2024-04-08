@@ -19,16 +19,15 @@ inline int rand_mm(int min, int max)
 
 float activation(float nb, activ_e act)
 {
-    switch (act)
-    {
-    case SIGF:
-        return sigmoidf(nb);
-        break;
-    case DIV:
-        return nb / 100000;
-        break;
-    default:
-        return nb;
-        break;
+    switch (act) {
+        case SIGF:
+            return sigmoidf(nb);
+            break;
+        case DIV:
+            return nb / 100000;
+            break;
+        default:
+            return nb;
+            break;
     }
 }

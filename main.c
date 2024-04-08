@@ -7,7 +7,7 @@
 
 #include "nn_framework.h"
 
-dat_t *array_to_datasheet(char **array, int ipl, int opl)
+static dat_t *array_to_datasheet(char **array, int ipl, int opl)
 {
     dat_t *datasheet = malloc(sizeof(dat_t));
     mat_t input = mat_init(1, ipl);
@@ -32,7 +32,7 @@ dat_t *array_to_datasheet(char **array, int ipl, int opl)
     return datasheet;
 }
 
-dat_t **file_to_dataset(int argc, char **argv)
+static dat_t **file_to_dataset(int argc, char **argv)
 {
     dat_t **head = malloc(sizeof(dat_t *));
     dat_t *dataset = NULL;
@@ -54,58 +54,29 @@ dat_t **file_to_dataset(int argc, char **argv)
     return head;
 }
 
-nn_t file_to_nn(int argc, char **argv)
-{
-    int *arch = malloc(sizeof(int) * argc - 2);
-    nn_t nn;
-
-    for (int i = 0; i < argc - 2; i++)
-        arch[i] = atoi(argv[i + 2]);
-    nn = nn_init(arch, argc - 2);
-    free(arch);
-    return nn;
-}
-
 int main(int argc, char **argv)
 {
-    if (argc < 4) {
-        printf("\nUSAGE :\n\n\t./neural_network data_file layer1 layer2 layer3...\n");
-        printf("\n\tThe layers are the architecture of the neural network\n");
-        printf("\n\tOne line from the datafile is equal to one data sheet :\n");
-        printf("\n\tThe inputs length is equal to the first layer's size,\n\tand the output equals to the last one.\n\n");
-        return 84;
-    }
 
-    srand(time(NULL));
-
+    nn_t nn = nn_open("nn_save.txt");
     dat_t **dataset = file_to_dataset(argc, argv);
-    nn_t nn = file_to_nn(argc, argv);
+
+    // srand(time(NULL));
+    // int arch[] = {2, 2, 1};
+    // nn_t nn = NN_INIT(arch);
+    // nn_print(nn, "nn");>
+
     nn_t g = nn_copy_arch(&nn);
-    float rate = 1;
-    float cost;
-    NN_PRINT(nn);
 
-    for (int i = 0; i < 10000; i++) {
-        cost  = nn_cost(&nn, dataset);
-        printf("[%d]: cost = %f\n", i, cost);
-        nn_backprop(&nn, &g, dataset);
-        nn_learn(&nn, &g, rate);
+    for (int i = 0; i < 100; i++) {
+        nn_train(&nn, &g, dataset);
+        nn_apply_gradient(&nn, &g, 0.01);
+        printf("%f\n", nn_cost(&nn, dataset));
+
     }
-
-
-    dat_t data_test;
-    data_test.intput = mat_init(1, 2);
-    data_test.intput.matrix[0][0] = 11;
-    data_test.intput.matrix[0][1] = 20;
-
-    nn_print_results(&nn, &data_test);
+    // nn_print(nn, "nn");
+    nn_print_results(&nn, dataset[0]);
 
 
 
-    nn_free(&nn);
-    nn_free(&g);
-    dataset_free(dataset);
+    nn_save(&nn, "nn_save.txt");
 }
-
-// TODO : ajouter la possibilité de sauvegarder l'état du réseau dans un fichier, et de le rouvrir plus tard
-// TODO : ajouter la possibilité de visualiser le réseau (CSFML)
