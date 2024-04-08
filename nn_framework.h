@@ -18,8 +18,6 @@
 #define MAT_PRINT(m) mat_print(m, #m)
 #define NN_PRINT(nn) nn_print(nn, #nn)
 #define NN_INIT(arch) nn_init(arch, (int)(sizeof(arch) / sizeof(*arch)))
-#define DATASHEET_INIT(ip, op) datasheet_init(ip,\
-(int)(sizeof(ip) / sizeof(*ip)), op, (int)(sizeof(op) / sizeof(*op)))
 
 #define ACTIVATION SIGF
 

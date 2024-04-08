@@ -12,7 +12,7 @@ dat_t *datasheet_init(float *inputs, int ip_len, float *outputs, int op_len)
     dat_t *datasheet = malloc(sizeof(dat_t));
 
     datasheet->intput = mat_init(1, ip_len);
-    datasheet->output= mat_init(1, op_len);
+    datasheet->output = mat_init(1, op_len);
     for (int i = 0; i < ip_len; i++)
         datasheet->intput.matrix[0][i] = inputs[i];
     for (int i = 0; i < op_len; i++)
@@ -36,6 +36,7 @@ void dataset_append(dat_t **dataset, dat_t *datasheet)
 void dataset_print(dat_t **dt)
 {
     dat_t *dataset = *dt;
+
     while (dataset != NULL) {
         printf("Datasheet :\n\t");
         mat_print(dataset->intput, "input");
